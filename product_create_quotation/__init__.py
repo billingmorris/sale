@@ -1,1 +1,1 @@
-from . import create_quotation_wizard
+from . import wizard
