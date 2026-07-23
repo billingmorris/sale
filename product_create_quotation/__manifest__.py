@@ -1,6 +1,6 @@
 {
     "name": "Crear cotización desde productos",
-    "version": "16.0.1.0.0",
+    "version": "16.0.1.1.0",
     "summary": "Crea una cotización borrador desde productos seleccionados",
     "category": "Sales",
     "author": "Proveo.net SAS",
