@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Vista formulario del wizard -->
+    <record id="view_product_create_quotation_wizard_form" model="ir.ui.view">
+        <field name="name">product.create.quotation.wizard.form</field>
+        <field name="model">product.create.quotation.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Crear Cotización">
+                <group>
+                    <field name="partner_id" options="{'no_create': True}"/>
+                </group>
+                <group string="Productos que se agregarán a la cotización">
+                    <field name="product_ids" nolabel="1" colspan="2">
+                        <tree editable="false" create="false" delete="false">
+                            <field name="default_code" string="Referencia"/>
+                            <field name="name" string="Producto"/>
+                            <field name="lst_price" string="Precio"/>
+                            <field name="uom_id" string="UdM"/>
+                        </tree>
+                    </field>
+                </group>
+                <footer>
+                    <button name="action_create_quotation"
+                            string="Crear Cotización"
+                            type="object"
+                            class="btn-primary"/>
+                    <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Acción que abre el wizard -->
+    <record id="action_product_create_quotation_wizard" model="ir.actions.act_window">
+        <field name="name">Crear Cotización</field>
+        <field name="res_model">product.create.quotation.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_view_types">list</field>
+    </record>
+
+    <!-- Ligar la acción al modelo product.product para que aparezca
+         en el menú "Acciones" de la vista de lista de Productos -->
+    <record id="action_product_create_quotation_wizard" model="ir.actions.act_window">
+        <field name="binding_model_id" ref="product.model_product_product"/>
+    </record>
+
+    <!-- Acción adicional ligada a product.template, por si el usuario
+         trabaja desde la lista de plantillas de producto -->
+    <record id="action_product_template_create_quotation_wizard" model="ir.actions.act_window">
+        <field name="name">Crear Cotización</field>
+        <field name="res_model">product.create.quotation.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_view_types">list</field>
+        <field name="binding_model_id" ref="product.model_product_template"/>
+    </record>
+
+</odoo>
