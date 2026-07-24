@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_order_form_inherit_add_products" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit.add.products</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='order_line']" position="before">
+                <button name="action_open_add_products_wizard"
+                        type="object"
+                        string="Agregar Productos"
+                        class="btn-secondary mb-2"
+                        icon="fa-plus-square"
+                        attrs="{'invisible': [('state', 'not in', ('draft', 'sent'))]}"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
