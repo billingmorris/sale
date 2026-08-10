@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Herencia del reporte PDF estándar de Orden de Venta (Odoo 16 Community).
+        Agrega la columna "Total con impuestos" a la tabla de líneas de producto.
+
+        NOTAS DE IMPLEMENTACIÓN:
+        ─────────────────────────────────────────────────────────────────────────
+        El template sale.report_saleorder_document en Odoo 16 tiene esta estructura
+        en la tabla de líneas:
+
+          <thead>
+            <tr>
+              <th ...>Descripción</th>
+              ...
+              <th ...>Importe</th>   ← ÚLTIMO TH
+            </tr>
+          </thead>
+          <tbody>
+            <t t-foreach="doc.order_line" ...>
+              <!-- Línea sección -->
+              <tr t-if="line.display_type == 'line_section'">
+                <td t-att-colspan="..." ...>...</td>
+              </tr>
+              <!-- Línea nota -->
+              <tr t-elif="line.display_type == 'line_note'">
+                <td t-att-colspan="..." ...>...</td>
+              </tr>
+              <!-- Línea normal -->
+              <tr t-else="">
+                ...
+                <td ...><span t-field="line.price_subtotal" .../></td>
+              </tr>
+            </t>
+          </tbody>
+
+        ESTRATEGIA XPATH:
+          1. Agregar <th> después del último <th> del encabezado.
+          2. Agregar <td> con total_with_tax después del td que contiene
+             el span con t-field="line.price_subtotal".
+          3. Las filas de sección/nota usan t-att-colspan dinámico que
+             Odoo calcula según las columnas visibles → se actualiza solo.
+        ─────────────────────────────────────────────────────────────────────────
+    -->
+    <template id="report_saleorder_document_total_tax"
+              inherit_id="sale.report_saleorder_document">
+
+        <!-- 1. Encabezado de la nueva columna -->
+        <xpath expr="//thead//th[last()]" position="after">
+            <th class="text-right">Total con impuestos</th>
+        </xpath>
+
+        <!-- 2. Celda de datos para líneas normales de producto
+             Buscamos el span con t-field="line.price_subtotal" y su td padre,
+             luego insertamos nuestro td a continuación. -->
+        <xpath expr="//span[@t-field='line.price_subtotal']/.." position="after">
+            <td class="text-right">
+                <span t-field="line.total_with_tax"
+                      t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+            </td>
+        </xpath>
+
+    </template>
+</odoo>
