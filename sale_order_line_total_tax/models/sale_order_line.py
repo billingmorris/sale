@@ -25,14 +25,14 @@ class SaleOrderLine(models.Model):
     def _compute_total_with_tax(self):
         for line in self:
             if not line.tax_id:
-                # Sin impuestos: total = subtotal de la línea
+                # Sin impuestos: total = subtotal de la linea
                 line.total_with_tax = line.price_subtotal
                 continue
 
             # Precio unitario con descuento aplicado
             price = line.price_unit * (1.0 - (line.discount or 0.0) / 100.0)
 
-            # Usar el motor fiscal estándar de Odoo
+            # Motor fiscal estandar de Odoo
             taxes = line.tax_id.compute_all(
                 price,
                 currency=line.order_id.currency_id,
@@ -41,6 +41,5 @@ class SaleOrderLine(models.Model):
                 partner=line.order_id.partner_shipping_id,
             )
 
-            # total_included ya contempla todos los impuestos
-            # (incluidos en precio o excluidos, múltiples impuestos, etc.)
+            # total_included contempla todos los impuestos correctamente
             line.total_with_tax = taxes['total_included']

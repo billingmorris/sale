@@ -12,6 +12,7 @@
     'author': 'Custom',
     'depends': ['sale'],
     'data': [
+        'views/sale_order_views.xml',
         'views/sale_order_report.xml',
     ],
     'installable': True,
